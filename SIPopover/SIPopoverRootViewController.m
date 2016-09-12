@@ -8,12 +8,68 @@
 #import "SIPopoverRootViewController.h"
 #import "SIPopoverAnimator.h"
 
+
+@interface SIPopoverTransition : NSObject <UINavigationBarDelegate, UIViewControllerTransitioningDelegate>
+
+- (instancetype)initWithDuration:(NSTimeInterval)duration;
+
+@property (nonatomic) NSTimeInterval duration;
+
+@end
+
+@implementation SIPopoverTransition
+
+- (instancetype)initWithDuration:(NSTimeInterval)duration {
+    self = [super init];
+    if (self) {
+        _duration = duration;
+    }
+    return self;
+}
+
+#pragma mark - UINavigationControllerDelegate
+
+- (id <UIViewControllerAnimatedTransitioning>)navigationController:(UINavigationController *)navigationController
+                                   animationControllerForOperation:(UINavigationControllerOperation)operation
+                                                fromViewController:(UIViewController *)fromVC
+                                                  toViewController:(UIViewController *)toVC
+{
+    SIPopoverAnimator *animator = [[SIPopoverAnimator alloc] init];
+    animator.operation = operation;
+    animator.duration = self.duration;
+    return animator;
+}
+
+#pragma mark - UIViewControllerTransitioningDelegate
+
+- (id <UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented presentingController:(UIViewController *)presenting sourceController:(UIViewController *)source
+{
+    return [self animatorWithPresentation:YES];
+}
+
+- (id <UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed
+{
+    return [self animatorWithPresentation:NO];
+}
+
+- (SIPopoverAnimator *)animatorWithPresentation:(BOOL)presentation
+{
+    SIPopoverAnimator *animator = [[SIPopoverAnimator alloc] init];
+    animator.presentation = presentation;
+    animator.duration = self.duration;
+    return animator;
+}
+
+@end
+
 static NSString * const PreferredContentSizeKeyPath = @"preferredContentSize";
 
-@interface SIPopoverRootViewController () <UIViewControllerTransitioningDelegate, UIGestureRecognizerDelegate>
+@interface SIPopoverRootViewController () <UIGestureRecognizerDelegate>
 
 @property (nonatomic, strong) UIView *dimView;
 @property (nonatomic, strong) UIView *containerView;
+
+@property (nonatomic, strong) SIPopoverTransition *transition;
 
 @end
 
@@ -32,10 +88,16 @@ static NSString * const PreferredContentSizeKeyPath = @"preferredContentSize";
     if (self = [super init]) {
         _contentViewController = rootViewController;
         self.modalPresentationStyle = UIModalPresentationCustom;
-        self.transitioningDelegate = self;
+        _transition = [[SIPopoverTransition alloc] initWithDuration:0.3];
+        self.transitioningDelegate = _transition;
         [_contentViewController addObserver:self forKeyPath:PreferredContentSizeKeyPath options:NSKeyValueObservingOptionNew context:nil];
     }
     return self;
+}
+
+- (void)setDuration:(NSTimeInterval)duration {
+    _duration = duration;
+    self.transition.duration = duration;
 }
 
 - (void)viewDidLoad
@@ -327,39 +389,6 @@ static NSString * const PreferredContentSizeKeyPath = @"preferredContentSize";
     if ([keyPath isEqualToString:PreferredContentSizeKeyPath]) {
         [self.view setNeedsLayout];
     }
-}
-
-#pragma mark - UINavigationControllerDelegate
-
-- (id <UIViewControllerAnimatedTransitioning>)navigationController:(UINavigationController *)navigationController
-                                   animationControllerForOperation:(UINavigationControllerOperation)operation
-                                                fromViewController:(UIViewController *)fromVC
-                                                  toViewController:(UIViewController *)toVC
-{
-    SIPopoverAnimator *animator = [[SIPopoverAnimator alloc] init];
-    animator.operation = operation;
-    animator.duration = self.duration;
-    return animator;
-}
-
-#pragma mark - UIViewControllerTransitioningDelegate
-
-- (id <UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented presentingController:(UIViewController *)presenting sourceController:(UIViewController *)source
-{
-    return [self animatorWithPresentation:YES];
-}
-
-- (id <UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed
-{
-    return [self animatorWithPresentation:NO];
-}
-
-- (SIPopoverAnimator *)animatorWithPresentation:(BOOL)presentation
-{
-    SIPopoverAnimator *animator = [[SIPopoverAnimator alloc] init];
-    animator.presentation = presentation;
-    animator.duration = self.duration;
-    return animator;
 }
 
 @end
