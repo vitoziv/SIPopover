@@ -61,7 +61,7 @@ static NSInteger const kSnapshotViewTag = 999;
             [containerView insertSubview:fromViewSnapshot atIndex:0];
         }
         [containerView addSubview:toViewController.view];
-        toViewController.view.frame = fromViewController.view.frame;
+        toViewController.view.frame = fromViewController.view.bounds;
         [toViewController.view layoutIfNeeded];
         
         [popoverRootViewController transitionInCompletion:completion];
