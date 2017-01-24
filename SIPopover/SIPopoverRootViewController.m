@@ -213,34 +213,6 @@ static NSString * const PreferredContentSizeKeyPath = @"preferredContentSize";
     }
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    
-    [self.contentViewController viewWillAppear:animated];
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    
-    [self.contentViewController viewDidAppear:animated];
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    
-    [self.contentViewController viewWillDisappear:animated];
-}
-
-- (void)viewDidDisappear:(BOOL)animated
-{
-    [super viewDidDisappear:animated];
-    
-    [self.contentViewController viewDidDisappear:animated];
-}
-
 #pragma mark - Gesture
 
 - (void)tapBackgroundHandler:(UITapGestureRecognizer *)gesture
