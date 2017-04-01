@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "UINavigationController+SIPopover.h"
+#import "SIPopoverDefine.h"
 
 @interface SINavigationPopoverSegue : UIStoryboardSegue
 

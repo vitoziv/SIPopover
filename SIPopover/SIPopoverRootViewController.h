@@ -16,12 +16,7 @@ typedef void(^SIPopoverDidFinishedBlock)(UIViewController *viewController);
 
 - (instancetype)initWithContentViewController:(UIViewController *)contentViewController;
 
-@property (nonatomic, assign) SIPopoverGravity gravity;
-@property (nonatomic, assign) SIPopoverTransitionStyle transitionStyle;
-@property (nonatomic, assign) SIPopoverBackgroundEffect backgroundEffect; // TODO: not yet implemented
-@property (nonatomic, assign) NSTimeInterval duration;
-@property (nonatomic, assign) BOOL tapBackgroundToDissmiss;
-@property (nonatomic, copy) SIPopoverDidFinishedBlock didFinishedHandler;
+@property (nonatomic, strong) SIPopoverConfiguration *configuration;
 
 - (void)transitionInCompletion:(void(^)(BOOL finished))completion;
 - (void)transitionOutCompletion:(void(^)(BOOL finished))completion;

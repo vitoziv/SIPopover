@@ -6,17 +6,13 @@
 //
 
 #import "SIPopoverSegue.h"
+#import "UIViewController+SIPopover.h"
 
 @implementation SIPopoverSegue
 
 - (void)perform
 {
-    NSTimeInterval duration = self.duration <= 0 ? 0.4 : self.duration;
-    [self.sourceViewController si_presentPopover:self.destinationViewController
-                                         gravity:self.gravity
-                                 transitionStyle:self.transitionStyle
-                                backgroundEffect:self.backgroundEffect
-                                        duration:duration];
+    [self.sourceViewController si_presentPopover:self.destinationViewController withConfig:self.configuration];
 }
 
 @end

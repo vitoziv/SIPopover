@@ -7,6 +7,7 @@
 //
 
 #import "SINavigationPopoverSegue.h"
+#import "UINavigationController+SIPopover.h"
 
 @implementation SINavigationPopoverSegue
 

@@ -52,12 +52,7 @@
 - (void)si_presentPopover:(UIViewController *)viewController withConfig:(SIPopoverConfiguration *)config
 {
     SIPopoverRootViewController *rootViewController = [[SIPopoverRootViewController alloc] initWithContentViewController:viewController];
-    rootViewController.gravity = config.gravity;
-    rootViewController.transitionStyle = config.transitionStyle;
-    rootViewController.backgroundEffect = config.backgroundEffect;
-    rootViewController.duration = config.duration;
-    rootViewController.tapBackgroundToDissmiss = config.tapBackgroundToDissmiss;
-    rootViewController.didFinishedHandler = config.didFinishedHandler;
+    rootViewController.configuration = config;
     [self presentViewController:rootViewController animated:YES completion:nil];
 }
 

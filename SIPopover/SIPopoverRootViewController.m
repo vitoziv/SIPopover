@@ -7,6 +7,7 @@
 
 #import "SIPopoverRootViewController.h"
 #import "SIPopoverAnimator.h"
+#import "SIPopoverConfiguration.h"
 
 
 @interface SIPopoverTransition : NSObject <UINavigationBarDelegate, UIViewControllerTransitioningDelegate>
@@ -80,8 +81,8 @@ static NSString * const PreferredContentSizeKeyPath = @"preferredContentSize";
 - (void)dealloc
 {
     [self.contentViewController removeObserver:self forKeyPath:PreferredContentSizeKeyPath context:nil];
-    if (self.didFinishedHandler) {
-        self.didFinishedHandler(self);
+    if (self.configuration.didFinishedHandler) {
+        self.configuration.didFinishedHandler(self);
     }
 }
 
@@ -98,7 +99,7 @@ static NSString * const PreferredContentSizeKeyPath = @"preferredContentSize";
 }
 
 - (void)setDuration:(NSTimeInterval)duration {
-    _duration = duration;
+    _configuration.duration = duration;
     self.transition.duration = duration;
 }
 
@@ -111,7 +112,7 @@ static NSString * const PreferredContentSizeKeyPath = @"preferredContentSize";
     
     self.dimView = [[UIView alloc] initWithFrame:self.view.bounds];
     self.dimView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    switch (self.backgroundEffect) {
+    switch (self.configuration.backgroundEffect) {
         case SIPopoverBackgroundEffectNone:
             self.dimView.backgroundColor = [UIColor clearColor];
             break;
@@ -178,7 +179,7 @@ static NSString * const PreferredContentSizeKeyPath = @"preferredContentSize";
                                                                       multiplier:1.0
                                                                         constant:size.width];
     [contentView addConstraint:widthConstraint];
-    switch (self.gravity) {
+    switch (self.configuration.gravity) {
         case SIPopoverGravityNone:{
             NSLayoutConstraint *verticalCenterConstraint = [NSLayoutConstraint constraintWithItem:contentView
                                                                                         attribute:NSLayoutAttributeCenterY
@@ -235,7 +236,7 @@ static NSString * const PreferredContentSizeKeyPath = @"preferredContentSize";
 {
     CGPoint location = [gesture locationInView:gesture.view];
     if (!CGRectContainsPoint(self.contentViewController.view.frame, location)) {
-        if (self.tapBackgroundToDissmiss) {
+        if (self.configuration.tapBackgroundToDissmiss) {
             [self dismissViewControllerAnimated:YES completion:nil];
         }
     }
@@ -252,11 +253,11 @@ static NSString * const PreferredContentSizeKeyPath = @"preferredContentSize";
 {
     UIView *contentView = self.contentViewController.view;
     CGFloat containerHeight = CGRectGetHeight(contentView.bounds);
-    switch (self.transitionStyle) {
+    switch (self.configuration.transitionStyle) {
         case SIPopoverTransitionStyleSlideFromTop:
         {
             contentView.transform = CGAffineTransformMakeTranslation(0, -containerHeight);
-            [UIView animateWithDuration:self.duration
+            [UIView animateWithDuration:self.configuration.duration
                                   delay:0
                  usingSpringWithDamping:1
                   initialSpringVelocity:0
@@ -270,7 +271,7 @@ static NSString * const PreferredContentSizeKeyPath = @"preferredContentSize";
         case SIPopoverTransitionStyleSlideFromBottom:
         {
             contentView.transform = CGAffineTransformMakeTranslation(0, containerHeight);
-            [UIView animateWithDuration:self.duration
+            [UIView animateWithDuration:self.configuration.duration
                                   delay:0
                  usingSpringWithDamping:1
                   initialSpringVelocity:0
@@ -285,7 +286,7 @@ static NSString * const PreferredContentSizeKeyPath = @"preferredContentSize";
         {
             contentView.transform = CGAffineTransformMakeScale(0.8, 0.8);
             contentView.alpha = 0;
-            [UIView animateWithDuration:self.duration
+            [UIView animateWithDuration:self.configuration.duration
                                   delay:0
                  usingSpringWithDamping:0.5
                   initialSpringVelocity:0
@@ -300,7 +301,7 @@ static NSString * const PreferredContentSizeKeyPath = @"preferredContentSize";
     }
     
     self.dimView.alpha = 0;
-    [UIView animateWithDuration:self.duration
+    [UIView animateWithDuration:self.configuration.duration
                      animations:^{
                          self.dimView.alpha = 1;
                      }];
@@ -308,62 +309,69 @@ static NSString * const PreferredContentSizeKeyPath = @"preferredContentSize";
 
 - (void)transitionOutCompletion:(void (^)(BOOL finished))completion
 {
+    if (self.configuration.transitionOutStyle == SIPopoverTransitionOutStyleUndefined) {
+        NSDictionary *transitionDic = @{@(SIPopoverTransitionStyleSlideFromBottom): @(SIPopoverTransitionOutStyleSlideToBottom),
+                                        @(SIPopoverTransitionStyleSlideFromTop): @(SIPopoverTransitionOutStyleSlideToTop),
+                                        @(SIPopoverTransitionStyleBounce): @(SIPopoverTransitionOutStyleBounce),};
+        self.configuration.transitionOutStyle = [transitionDic[@(self.configuration.transitionStyle)] integerValue];
+    }
+    
     UIView *contentView = self.contentViewController.view;
-    switch (self.transitionStyle) {
-        case SIPopoverTransitionStyleSlideFromTop:
-        {
-            [UIView animateWithDuration:self.duration
-                                  delay:0
-                 usingSpringWithDamping:1
-                  initialSpringVelocity:0
-                                options:UIViewAnimationOptionCurveEaseIn
-                             animations:^{
-                                 CGRect rect = contentView.frame;
-                                 rect.origin.y = -CGRectGetHeight(rect);
-                                 contentView.frame = rect;
-                             }
-                             completion:completion];
-        }
+    switch (self.configuration.transitionOutStyle) {
+            case SIPopoverTransitionOutStyleSlideToTop: {
+                [UIView animateWithDuration:self.configuration.duration
+                                      delay:0
+                     usingSpringWithDamping:1
+                      initialSpringVelocity:0
+                                    options:UIViewAnimationOptionCurveEaseIn
+                                 animations:^{
+                                     CGRect rect = contentView.frame;
+                                     rect.origin.y = -CGRectGetHeight(rect);
+                                     contentView.frame = rect;
+                                 }
+                                 completion:completion];
+            }
             break;
-        case SIPopoverTransitionStyleSlideFromBottom:
-        {
-            CGFloat containerHeight = CGRectGetHeight(self.view.bounds);
-            [UIView animateWithDuration:self.duration
-                                  delay:0
-                 usingSpringWithDamping:1
-                  initialSpringVelocity:0
-                                options:UIViewAnimationOptionCurveEaseIn
-                             animations:^{
-                                 CGRect rect = contentView.frame;
-                                 rect.origin.y = containerHeight;
-                                 contentView.frame = rect;
-                             }
-                             completion:completion];
-        }
+            case SIPopoverTransitionOutStyleSlideToBottom: {
+                CGFloat containerHeight = CGRectGetHeight(self.view.bounds);
+                [UIView animateWithDuration:self.configuration.duration
+                                      delay:0
+                     usingSpringWithDamping:1
+                      initialSpringVelocity:0
+                                    options:UIViewAnimationOptionCurveEaseIn
+                                 animations:^{
+                                     CGRect rect = contentView.frame;
+                                     rect.origin.y = containerHeight;
+                                     contentView.frame = rect;
+                                 }
+                                 completion:completion];
+            }
             break;
-        case SIPopoverTransitionStyleBounce:
-        {
-            [UIView animateKeyframesWithDuration:self.duration
-                                           delay:0
-                                         options:UIViewKeyframeAnimationOptionCalculationModeLinear
-                                      animations:^{
-                                          [UIView addKeyframeWithRelativeStartTime:0
-                                                                  relativeDuration:0.2
-                                                                        animations:^{
-                                                                            contentView.transform = CGAffineTransformMakeScale(1.1, 1.1);
-                                                                        }];
-                                          [UIView addKeyframeWithRelativeStartTime:0.2
-                                                                  relativeDuration:0.8
-                                                                        animations:^{
-                                                                            contentView.transform = CGAffineTransformMakeScale(0.8, 0.8);
-                                                                            contentView.alpha = 0;
-                                                                        }];
-                                      }
-                                      completion:completion];
-        }
+            case SIPopoverTransitionOutStyleBounce: {
+                [UIView animateKeyframesWithDuration:self.configuration.duration
+                                               delay:0
+                                             options:UIViewKeyframeAnimationOptionCalculationModeLinear
+                                          animations:^{
+                                              [UIView addKeyframeWithRelativeStartTime:0
+                                                                      relativeDuration:0.2
+                                                                            animations:^{
+                                                                                contentView.transform = CGAffineTransformMakeScale(1.1, 1.1);
+                                                                            }];
+                                              [UIView addKeyframeWithRelativeStartTime:0.2
+                                                                      relativeDuration:0.8
+                                                                            animations:^{
+                                                                                contentView.transform = CGAffineTransformMakeScale(0.8, 0.8);
+                                                                                contentView.alpha = 0;
+                                                                            }];
+                                          }
+                                          completion:completion];
+            }
+            
+        default:
             break;
     }
-    [UIView animateWithDuration:self.duration
+    
+    [UIView animateWithDuration:self.configuration.duration
                      animations:^{
                          self.dimView.alpha = 0;
                      }];

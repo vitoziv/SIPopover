@@ -13,5 +13,6 @@
 #import "SINavigationPopoverSegue.h"
 #import "UIViewController+SIPopover.h"
 #import "UINavigationController+SIPopover.h"
+#import "SIPopoverConfiguration.h"
 
 #endif

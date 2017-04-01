@@ -20,23 +20,20 @@
 - (void)si_pushPopover:(UIViewController *)viewController gravity:(SIPopoverGravity)gravity transitionStyle:(SIPopoverTransitionStyle)transitionStyle backgroundEffect:(SIPopoverBackgroundEffect)backgroundEffect duration:(NSTimeInterval)duration
 {
     SIPopoverRootViewController *rootViewController = [[SIPopoverRootViewController alloc] initWithContentViewController:viewController];
-    rootViewController.gravity = gravity;
-    rootViewController.transitionStyle = transitionStyle;
-    rootViewController.backgroundEffect = backgroundEffect;
-    rootViewController.duration = duration;
-    rootViewController.tapBackgroundToDissmiss = YES;
+    SIPopoverConfiguration *configuration = [SIPopoverConfiguration new];
+    configuration.gravity = gravity;
+    configuration.transitionStyle = transitionStyle;
+    configuration.backgroundEffect = backgroundEffect;
+    configuration.duration = duration;
+    configuration.tapBackgroundToDissmiss = YES;
+    rootViewController.configuration = configuration;
     self.delegate = rootViewController;
     [self pushViewController:rootViewController animated:YES];
 }
 
 - (void)si_pushPopover:(UIViewController *)viewController withConfig:(SIPopoverConfiguration *)config {
     SIPopoverRootViewController *rootViewController = [[SIPopoverRootViewController alloc] initWithContentViewController:viewController];
-    rootViewController.gravity = config.gravity;
-    rootViewController.transitionStyle = config.transitionStyle;
-    rootViewController.backgroundEffect = config.backgroundEffect;
-    rootViewController.duration = config.duration;
-    rootViewController.tapBackgroundToDissmiss = config.tapBackgroundToDissmiss;
-    rootViewController.didFinishedHandler = config.didFinishedHandler;
+    rootViewController.configuration = config;
     self.delegate = rootViewController;
     [self pushViewController:rootViewController animated:YES];
 }
