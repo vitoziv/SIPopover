@@ -73,6 +73,7 @@ static NSString * const PreferredContentSizeKeyPath = @"preferredContentSize";
 @property (nonatomic, assign) UIStatusBarStyle savedStyle;
 @property (nonatomic, assign) BOOL savedHidden;
 @property (nonatomic, strong) SIPopoverTransition *transition;
+@property (nonatomic, strong) NSLayoutConstraint *heightConstraint;
 
 @end
 
@@ -162,14 +163,14 @@ static NSString * const PreferredContentSizeKeyPath = @"preferredContentSize";
                                                                                    constant:0];
     [contentView.superview addConstraint:horizontalCenterConstraint];
     
-    NSLayoutConstraint *heightConstraint = [NSLayoutConstraint constraintWithItem:contentView
-                                                                        attribute:NSLayoutAttributeHeight
-                                                                        relatedBy:NSLayoutRelationGreaterThanOrEqual
-                                                                           toItem:nil
-                                                                        attribute:0
-                                                                       multiplier:1.0
-                                                                         constant:size.height];
-    [contentView addConstraint:heightConstraint];
+    self.heightConstraint = [NSLayoutConstraint constraintWithItem:contentView
+                                                         attribute:NSLayoutAttributeHeight
+                                                         relatedBy:NSLayoutRelationGreaterThanOrEqual
+                                                            toItem:nil
+                                                         attribute:0
+                                                        multiplier:1.0
+                                                          constant:size.height];
+    [contentView addConstraint:self.heightConstraint];
     
     NSLayoutConstraint *widthConstraint = [NSLayoutConstraint constraintWithItem:contentView
                                                                        attribute:NSLayoutAttributeWidth
@@ -219,6 +220,11 @@ static NSString * const PreferredContentSizeKeyPath = @"preferredContentSize";
     }
 }
 
+- (void)viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
+    CGSize size = [self.contentViewController preferredContentSize];
+    self.heightConstraint.constant = size.height;
+}
 
 - (UIStatusBarStyle)preferredStatusBarStyle
 {

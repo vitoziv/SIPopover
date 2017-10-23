@@ -258,6 +258,9 @@
 				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = "Sumi Interactive";
 				TargetAttributes = {
+					7E391A9C18B32F290007A3DC = {
+						DevelopmentTeam = ZZX7396L9W;
+					};
 					7E391ABD18B32F290007A3DC = {
 						TestTargetID = 7E391A9C18B32F290007A3DC;
 					};
@@ -450,6 +453,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				DEVELOPMENT_TEAM = ZZX7396L9W;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SIPopoverExample/SIPopoverExample-Prefix.pch";
 				INFOPLIST_FILE = "SIPopoverExample/SIPopoverExample-Info.plist";
@@ -464,6 +468,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				DEVELOPMENT_TEAM = ZZX7396L9W;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SIPopoverExample/SIPopoverExample-Prefix.pch";
 				INFOPLIST_FILE = "SIPopoverExample/SIPopoverExample-Info.plist";
