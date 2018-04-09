@@ -18,7 +18,6 @@
     [navigationController si_pushPopover:self.destinationViewController
                                  gravity:self.gravity
                          transitionStyle:self.transitionStyle
-                        backgroundEffect:self.backgroundEffect
                                 duration:duration];
 }
 

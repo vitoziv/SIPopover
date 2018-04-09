@@ -20,7 +20,7 @@
     if (self = [super init]) {
         _gravity = SIPopoverGravityNone;
         _transitionStyle = SIPopoverTransitionStyleSlideFromBottom;
-        _backgroundEffect = SIPopoverBackgroundEffectNone;
+        _backgroundColor = [UIColor clearColor];
         _duration = .4f;
         _tapBackgroundToDissmiss = YES;
     }

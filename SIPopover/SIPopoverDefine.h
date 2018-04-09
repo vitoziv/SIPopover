@@ -19,14 +19,6 @@ typedef NS_ENUM(NSUInteger, SIPopoverTransitionOutStyle) {
     SIPopoverTransitionOutStyleBounce,
 };
 
-typedef NS_ENUM(NSInteger, SIPopoverBackgroundEffect) {
-    SIPopoverBackgroundEffectNone = 0,
-    SIPopoverBackgroundEffectDarken = 1 << 0,
-    SIPopoverBackgroundEffectLighten = 1 << 1,
-    SIPopoverBackgroundEffectBlur = 1 << 2,
-    SIPopoverBackgroundEffectPushBack = 1 << 3,
-};
-
 typedef NS_ENUM(NSInteger, SIPopoverGravity) {
     SIPopoverGravityNone = 0,
     SIPopoverGravityBottom,

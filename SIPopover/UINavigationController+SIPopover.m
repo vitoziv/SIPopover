@@ -14,16 +14,15 @@
 
 - (void)si_pushPopover:(UIViewController *)viewController gravity:(SIPopoverGravity)gravity transitionStyle:(SIPopoverTransitionStyle)transitionStyle
 {
-    [self si_pushPopover:viewController gravity:gravity transitionStyle:transitionStyle backgroundEffect:SIPopoverBackgroundEffectDarken duration:0.4];
+    [self si_pushPopover:viewController gravity:gravity transitionStyle:transitionStyle duration:0.4];
 }
 
-- (void)si_pushPopover:(UIViewController *)viewController gravity:(SIPopoverGravity)gravity transitionStyle:(SIPopoverTransitionStyle)transitionStyle backgroundEffect:(SIPopoverBackgroundEffect)backgroundEffect duration:(NSTimeInterval)duration
+- (void)si_pushPopover:(UIViewController *)viewController gravity:(SIPopoverGravity)gravity transitionStyle:(SIPopoverTransitionStyle)transitionStyle duration:(NSTimeInterval)duration
 {
     SIPopoverRootViewController *rootViewController = [[SIPopoverRootViewController alloc] initWithContentViewController:viewController];
     SIPopoverConfiguration *configuration = [SIPopoverConfiguration new];
     configuration.gravity = gravity;
     configuration.transitionStyle = transitionStyle;
-    configuration.backgroundEffect = backgroundEffect;
     configuration.duration = duration;
     configuration.tapBackgroundToDissmiss = YES;
     rootViewController.configuration = configuration;

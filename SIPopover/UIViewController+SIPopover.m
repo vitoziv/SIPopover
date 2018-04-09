@@ -30,21 +30,11 @@
     [self si_presentPopover:viewController withConfig:configuration];
 }
 
-- (void)si_presentPopover:(UIViewController *)viewController gravity:(SIPopoverGravity)gravity transitionStyle:(SIPopoverTransitionStyle)transitionStyle backgroundEffect:(SIPopoverBackgroundEffect)backgroundEffect
+- (void)si_presentPopover:(UIViewController *)viewController gravity:(SIPopoverGravity)gravity transitionStyle:(SIPopoverTransitionStyle)transitionStyle duration:(NSTimeInterval)duration
 {
     SIPopoverConfiguration *configuration = [SIPopoverConfiguration defaultConfig];
     configuration.gravity = gravity;
     configuration.transitionStyle = transitionStyle;
-    configuration.backgroundEffect = backgroundEffect;
-    [self si_presentPopover:viewController withConfig:configuration];
-}
-
-- (void)si_presentPopover:(UIViewController *)viewController gravity:(SIPopoverGravity)gravity transitionStyle:(SIPopoverTransitionStyle)transitionStyle backgroundEffect:(SIPopoverBackgroundEffect)backgroundEffect duration:(NSTimeInterval)duration
-{
-    SIPopoverConfiguration *configuration = [SIPopoverConfiguration defaultConfig];
-    configuration.gravity = gravity;
-    configuration.transitionStyle = transitionStyle;
-    configuration.backgroundEffect = backgroundEffect;
     configuration.duration = duration;
     [self si_presentPopover:viewController withConfig:configuration];
 }

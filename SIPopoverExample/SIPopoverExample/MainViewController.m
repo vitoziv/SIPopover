@@ -61,12 +61,10 @@
         SIPopoverSegue *popover = (SIPopoverSegue *)segue;
         popover.configuration.gravity = [self.params[@"gravity"] integerValue];
         popover.configuration.transitionStyle = [self.params[@"transitionStyle"] integerValue];
-        popover.configuration.backgroundEffect = [self.params[@"backgroundEffect"] integerValue];
     } else if ([segue.identifier isEqual:@"ShowNavigationPopover"]) {
         SINavigationPopoverSegue *popover = (SINavigationPopoverSegue *)segue;
         popover.gravity = [self.params[@"gravity"] integerValue];
         popover.transitionStyle = [self.params[@"transitionStyle"] integerValue];
-        popover.backgroundEffect = [self.params[@"backgroundEffect"] integerValue];
     }
 }
 
